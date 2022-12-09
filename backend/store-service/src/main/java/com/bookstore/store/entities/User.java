@@ -3,59 +3,54 @@ package com.bookstore.store.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "avaliacao")
-public class Review implements Serializable {
-    private static final long serialVersionUID = 5391435310989594110L;
+@Table(name = "usuario")
+public class User implements Serializable {
+    private static final long serialVersionUID = -70987494770293557L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long id;    
+ 
+    @Column(name = "nome_usuario", nullable = false)
+    private String username;
+ 
+    @Column(name = "email", nullable = false)
+    private String email;   
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private User user;
-
-    @Column(name = "comentario", nullable = false, length = 1000)
-    private String comment;
-
-    @Column(name = "avaliacao", nullable = true)
-    private int rating;
-
-    @ManyToOne
-    @JoinColumn(name = "id_produto", nullable = false)
-    private Product product;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pessoa", referencedColumnName = "id")
+    private Person person;
 
     @Column(name = "data_criacao", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-
+    
     @Column(name = "data_atualizacao")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    public Review() {
+    public User() {
 
     }
 
-    public Review(Long id, User user, String comment, int rating, Product product, Date creationDate,
-            Date updateDate) {
+    public User(Long id, String username, String email, Person person, Date creationDate, Date updateDate) {
         this.id = id;
-        this.user = user;
-        this.comment = comment;
-        this.rating = rating;
-        this.product = product;
+        this.username = username;
+        this.email = email;
+        this.person = person;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
     }
@@ -68,36 +63,28 @@ public class Review implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getComment() {
-        return comment;
+    public String getEmail() {
+        return email;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getRating() {
-        return rating;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public Date getCreationDate() {
@@ -121,6 +108,8 @@ public class Review implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
         return result;
     }
 
@@ -132,19 +121,29 @@ public class Review implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Review other = (Review) obj;
+        User other = (User) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (username == null) {
+            if (other.username != null)
+                return false;
+        } else if (!username.equals(other.username))
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Review [id=" + id + ", user=" + user + ", comment=" + comment + ", rating=" + rating + ", product="
-                + product + ", creationDate=" + creationDate + ", updateDate=" + updateDate + "]";
+        return "User [id=" + id + ", username=" + username + ", email=" + email + ", person=" + person
+                + ", creationDate=" + creationDate + ", updateDate=" + updateDate + "]";
     }
 
 }
